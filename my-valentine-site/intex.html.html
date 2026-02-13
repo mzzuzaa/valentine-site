@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аселя 💖</title>
+
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1a1a2e, #16213e);
+  font-family: 'Comic Sans MS', cursive;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Фон с сердечками */
+body::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(#ff4da6 4px, transparent 4px);
+  background-size: 40px 40px;
+  z-index: 0;
+  pointer-events: none;
+  animation: heartsMove 60s linear infinite;
+}
+
+@keyframes heartsMove {
+  from { background-position: 0 0; }
+  to { background-position: -1000px 1000px; }
+}
+
+#topGif {
+  width: 200px;
+  max-width: 50vw;
+  height: auto;
+  margin-bottom: 20px;
+  z-index: 1;
+  position: relative;
+  border-radius: 15px;
+}
+
+#question {
+  font-size: 24px;
+  margin-bottom: 20px;
+  animation: glow 2s infinite alternate;
+  z-index: 1;
+  position: relative;
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 10px #ff4da6; }
+  50% { text-shadow: 0 0 20px #ff66b3; }
+  100% { text-shadow: 0 0 30px #ff99cc; }
+}
+
+button {
+  padding: 12px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 15px;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1;
+  position: relative;
+}
+
+#yesBtn { 
+  background: #28a745; 
+  color: white; 
+}
+
+#noBtn { 
+  background: #dc3545;
+  color: white;
+  width: 120px;
+  height: 50px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+#noBtn:hover {
+  transform: scale(1.2);
+}
+
+@media (max-width: 600px) {
+  #topGif { width: 150px; }
+  #question { font-size: 20px; }
+  button { font-size: 16px; padding: 10px 20px; margin: 5px; }
+}
+</style>
+</head>
+<body>
+
+<img id="topGif" src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcXd4YnozY3dwbWVxOGoxdTUyZjR1ODFzcGY4Y3lzaW1jOHlpdTJ6ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wvYNSqBAMDVx8CEYkt/giphy.gif" alt="Gif сверху" loading="lazy">
+
+<h1 id="question">Будешь моей валентинкой? 💖</h1>
+
+<div style="display: flex; align-items: center; justify-content: center; gap: 10px; z-index: 1; position: relative;">
+  <button id="yesBtn">Yes ❤️</button>
+  <button id="noBtn">No 💔</button>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+</audio>
+
+<audio id="meow">
+  <source src="https://www.soundjay.com/cat/cat-meow-1.mp3" type="audio/mp3">
+</audio>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const question = document.getElementById("question");
+const music = document.getElementById("bgMusic");
+const meow = document.getElementById("meow");
+const topGif = document.getElementById("topGif");
+
+let yesScale = 1;
+
+// Размер кнопки No
+const btnWidth = noBtn.offsetWidth;
+const btnHeight = noBtn.offsetHeight;
+
+// Фиксированный квадрат 5x5 клеток для движения No
+const squareCols = 5;
+const squareRows = 5;
+
+function moveNoButton() {
+  // Определяем верхний левый угол квадрата (например, от центра экрана)
+  const squareLeft = window.innerWidth/2 - (btnWidth * squareCols)/2;
+  const squareTop = window.innerHeight/2 - (btnHeight * squareRows)/2;
+
+  const col = Math.floor(Math.random() * squareCols);
+  const row = Math.floor(Math.random() * squareRows);
+
+  const x = squareLeft + col * btnWidth;
+  const y = squareTop + row * btnHeight;
+
+  noBtn.style.position = "absolute";
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+
+  // Увеличиваем кнопку Yes при каждом клике на No
+  yesScale += 0.2;
+  yesBtn.style.transform = `scale(${yesScale})`;
+}
+
+noBtn.addEventListener("click", () => {
+  meow.play();
+  moveNoButton();
+});
+
+yesBtn.addEventListener("click", () => {
+  if (music.paused) music.play();
+  topGif.src = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTdjc2o4NjU5NzhlM3hvOGtnZnNtcG1jNmJjbGhud25jZW10Y2YwayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GDlw1qnt6mQS5ulGfe/giphy.gif";
+  question.innerText = "Аселя сказала ДА! 💍💖";
+});
+</script>
+
+</body>
+</html>
